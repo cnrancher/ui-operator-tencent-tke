@@ -138,7 +138,7 @@ const DEFAULT_NODE_GROUP_CONFIG = {
   dataDiskSize:   0,
   instanceNum:    1,
   bandwidth:      10,
-  bandwidthType:  'BANDWIDTH_POSTPAID_BY_HOUR',
+  bandwidthType:  'TRAFFIC_POSTPAID_BY_HOUR',
   systemDiskType: null,
   dataDiskType:   null,
   osName:         null,
@@ -228,7 +228,7 @@ export default Ember.Component.extend(ClusterDriver, {
         securityGroup:  null,
         instanceType:   null,
         osName:         'tlinux3.1x86_64',
-        bandwidthType:  'BANDWIDTH_POSTPAID_BY_HOUR',
+        bandwidthType:  'TRAFFIC_POSTPAID_BY_HOUR',
         bandwidth:      10,
         keyId:          null,
         clusterType:    'MANAGED_CLUSTER',
@@ -242,6 +242,7 @@ export default Ember.Component.extend(ClusterDriver, {
           "addonName": "CBS",
           "addonParam": "{\"kind\":\"App\",\"spec\":{\"chart\":{\"chartName\":\"cbs\",\"chartVersion\":\"1.0.9\"},\"values\":{\"values\":[],\"rawValues\":\"e30=\",\"rawValuesType\":\"json\"}}}"
         }]),
+        clusterEndpoint: true,
       });
 
       set(this, 'config', config);
@@ -336,6 +337,9 @@ export default Ember.Component.extend(ClusterDriver, {
         tkeCredentialSecret: get(this, 'primaryResource.cloudCredentialId'),
         clusterId,
         region: get(this, 'config.region'),
+        clusterEndpoint: {
+          enable: get(this, 'config.clusterEndpoint')
+        }
       }
 
       set(this, 'cluster.tkeConfig', config);
@@ -512,6 +516,7 @@ export default Ember.Component.extend(ClusterDriver, {
     });
 
     const out = {
+      clusterEndpoint: clusterEndpoint.enable === undefined ? true : !!clusterEndpoint.enable,
       imported: config.imported,
       region: config.region,
       subnetId: get(clusterEndpoint, 'subnetId'),
@@ -727,6 +732,12 @@ export default Ember.Component.extend(ClusterDriver, {
     const componentNames = components.map(item=>item.addonName);
     return componentNames.join();
   }),
+  clusterEndpointShowValue: computed('config.clusterEndpoint', 'intl.locale', function() {
+    const intl = get(this, 'intl');
+
+    return intl.t(`clusterNew.tencenttke.proxy.${get(this, 'config.clusterEndpoint') ? 'outer' : 'inner'}`);
+  }),
+  
 
   nodePoollInstanceTypeChange: observer('nodePoolList.@each.{instanceType}', 'diskList', function(){
     const nodePoolList = get(this, 'nodePoolList') || [];
@@ -1206,7 +1217,7 @@ export default Ember.Component.extend(ClusterDriver, {
     });
 
     const clusterEndpoint = {
-      enable: true,
+      enable: config.clusterEndpoint,
       subnetId: config.subnetId,
       securityGroup: config.securityGroup,
     }

@@ -93,6 +93,28 @@
             {{/input-or-display}}
           </div>
         </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label">{{t "clusterNew.tencenttke.proxy.label"}}</label>
+            <div class="radio">
+              <label>
+                {{radio-button selection=config.clusterEndpoint value=false}}
+                {{t 'clusterNew.tencenttke.proxy.inner'}}
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                {{radio-button selection=config.clusterEndpoint value=true}}
+                {{t 'clusterNew.tencenttke.proxy.outer'}}
+              </label>
+            </div>
+            {{#banner-message color="bg-warning"}}
+              <p>
+                {{t "clusterNew.tencenttke.proxy.info"}}
+              </p>
+            {{/banner-message}}
+          </div>
+        </div>
       {{/accordion-list-item }}
       {{save-cancel
         editing=(eq mode "edit")
@@ -326,6 +348,26 @@
           {{/if}}
         </div>
       </div>
+      <div class="row">
+        <div class="col span-6">
+          <label class="acc-label">{{t "clusterNew.tencenttke.proxy.label"}}</label>
+          {{#input-or-display 
+            editable=(and (eq step 2) isNew) 
+            value=clusterEndpointShowValue
+          }}
+            <div class="radio">
+              <label>{{radio-button selection=config.clusterEndpoint value=false}} {{t 'clusterNew.tencenttke.proxy.inner'}}</label>
+            </div>
+            <div class="radio">
+              <label>{{radio-button selection=config.clusterEndpoint value=true}} {{t 'clusterNew.tencenttke.proxy.outer'}}</label>
+            </div>
+          {{/input-or-display}}
+        </div>
+      </div>
+
+        
+
+
       {{!-- {{#if (not isImportProvider)}}
       <div class="row">
         <div class="col span-6">

@@ -46,7 +46,7 @@ clusterNew:
       required: Worker Nodes is required
     ecsCount:
       label: Number of ECS
-      placeholder: '1-500'
+      placeholder: '3-500'
     nodeGroups:
       addLabel: Add Node Group
       detail: Customize managed node groups.
@@ -160,3 +160,8 @@ clusterNew:
       eu-moscow: Moscow
       ap-jakarta: Jakarta
       sa-saopaulo: Saopaulo
+    proxy:
+      label: Access cluster APIServer
+      inner: Inner Net
+      outer: Outer Net
+      info: It is necessary to ensure that the cluster to be imported has the cluster access agent enabled and the security group used has opened port 443.
